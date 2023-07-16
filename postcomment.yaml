@@ -1,0 +1,252 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Blog System API
+  description: API documentation for the Blog System
+
+paths:
+  /posts:
+    post:
+      summary: Create a new post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: post
+          description: Post object
+          required: true
+          schema:
+            $ref: '#/definitions/PostInput'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/PostOutput'
+        '500':
+          description: Internal Server Error
+
+    get:
+      summary: Get all posts
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PostOutput'
+        '500':
+          description: Internal Server Error
+
+  /posts/{postId}:
+    get:
+      summary: Get a specific post by ID
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: postId
+          description: ID of the post
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PostOutput'
+        '404':
+          description: Post not found
+        '500':
+          description: Internal Server Error
+
+    put:
+      summary: Update a specific post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: postId
+          description: ID of the post
+          required: true
+          type: string
+        - in: body
+          name: updatedPost
+          description: Updated post object
+          required: true
+          schema:
+            $ref: '#/definitions/PostInput'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PostOutput'
+        '404':
+          description: Post not found
+        '500':
+          description: Internal Server Error
+
+    delete:
+      summary: Delete a specific post
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: postId
+          description: ID of the post
+          required: true
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Post not found
+        '500':
+          description: Internal Server Error
+
+  /posts/{postId}/comments:
+    post:
+      summary: Create a new comment for a specific post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: postId
+          description: ID of the post
+          required: true
+          type: string
+        - in: body
+          name: comment
+          description: Comment object
+          required: true
+          schema:
+            $ref: '#/definitions/CommentInput'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/CommentOutput'
+        '404':
+          description: Post not found
+        '500':
+          description: Internal Server Error
+
+    get:
+      summary: Get all comments for a specific post
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: postId
+          description: ID of the post
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CommentOutput'
+        '404':
+          description: Post not found
+        '500':
+          description: Internal Server Error
+
+  /comments/{commentId}:
+    put:
+      summary: Update a specific comment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: commentId
+          description: ID of the comment
+          required: true
+          type: string
+        - in: body
+          name: updatedComment
+          description: Updated comment object
+          required: true
+          schema:
+            $ref: '#/definitions/CommentInput'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CommentOutput'
+        '404':
+          description: Comment not found
+        '500':
+          description: Internal Server Error
+
+    delete:
+      summary: Delete a specific comment
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: commentId
+          description: ID of the comment
+          required: true
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Comment not found
+        '500':
+          description: Internal Server Error
+
+definitions:
+  PostInput:
+    type: object
+    properties:
+      title:
+        type: string
+      content:
+        type: string
+      author:
+        type: string
+
+  PostOutput:
+    type: object
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      content:
+        type: string
+      author:
+        type: string
+
+  CommentInput:
+    type: object
+    properties:
+      postId:
+        type: string
+      content:
+        type: string
+      author:
+        type: string
+
+  CommentOutput:
+    type: object
+    properties:
+      id:
+        type: string
+      postId:
+        type: string
+      content:
+        type: string
+      author:
+        type: string
